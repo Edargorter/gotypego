@@ -115,7 +115,7 @@ func play(tg TGame, player string) {
 					quit()
 
 				//Backspace character
-				case 0x7f:
+				case 0x7f, 0x8:
 					if len(word) > 0 {
 						word = word[:len(word) - 1]
 						fmt.Print(esc["backspace"])
@@ -169,7 +169,7 @@ func main() {
 	}
 	old_state = prev_state
 
-	test_file := "test_text.txt"
+	test_file := "texts/test_text.txt"
 	player := "player1"
 	test_game := TGame{tg_name: "test", tg_filename: test_file}
 	play(test_game, player)
