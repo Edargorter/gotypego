@@ -53,6 +53,13 @@ func min[T constraints.Ordered](a, b T) T {
     return b
 }
 
+func max[T constraints.Ordered](a, b T) T {
+    if a > b {
+        return a
+    }
+    return b
+}
+
 //Clear screen
 func cls() {
 	cmd := exec.Command(os_cmds["clear"])
@@ -119,27 +126,26 @@ func play(tg TGame, player string) {
 					if len(word) > 0 {
 						word = word[:len(word) - 1]
 						fmt.Print(esc["backspace"])
-						miss--
+						miss = max(miss - 1, 0)
 					}
 
-				//Correct next char
-				case text[score]:
-					score++
-					if score == len(text) {
-						cls()
-						fmt.Print("Victory!\r\n")
-						quit()
-					}
-					word += string(c)
-					if c == ' ' {
-						fmt.Print(get_n_string(esc["backspace"], len(word)))
-						word = ""
-					}
-
-				//Increase red 
+				//Increase green (score) or red 
 				default:
 					if c >= 0x20 && c <= 0x7e {
-						if miss < len(text) - score {
+						//Correct next char
+						if miss == 0 && c == text[score] {
+							score++
+							if score == len(text) {
+								cls()
+								fmt.Print("Victory!\r\n")
+								quit()
+							}
+							word += string(c)
+							if c == ' ' {
+								fmt.Print(get_n_string(esc["backspace"], len(word)))
+								word = ""
+							}
+						} else if miss < len(text) - score {
 							miss++
 							word += string(c)
 						}
