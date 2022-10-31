@@ -8,9 +8,10 @@ import (
 	"os/exec"
 //	"strings"
 	"io/ioutil"
-//	"time"
+	"time"
 	"log"
 	"runtime"
+//	"math"
 	"golang.org/x/exp/constraints"
 	"golang.org/x/term"
 )
@@ -105,6 +106,8 @@ func play(tg TGame, player string) {
 	miss = 0
 	word = ""
 
+	start := time.Now()
+
 	for ;; {
 		//Read one byte 
 		_, err := os.Stdin.Read(cmd_buf)
@@ -138,6 +141,8 @@ func play(tg TGame, player string) {
 							if score == len(text) {
 								cls()
 								fmt.Print("Victory!\r\n")
+								finish := time.Now()
+								fmt.Printf("Time: %s\r\n", finish.Sub(start))
 								quit()
 							}
 							word += string(c)
